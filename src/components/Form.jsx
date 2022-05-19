@@ -1,6 +1,6 @@
 import "../static/css/form.css";
 import { useState } from "react";
-import { expresiones } from '../helpers/expresiones-regulares'
+import { expresiones } from "../helpers/expresiones-regulares";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import Input from "./Input";
@@ -12,9 +12,49 @@ export default function Form() {
   const [phone, setPhone] = useState({ field: "", valid: null });
   const [password, setPassword] = useState({ field: "", valid: null });
   const [password2, setPassword2] = useState({ field: "", valid: null });
+  const [terminos, setTerminos] = useState(false);
+  const [formValid, setFormValid] = useState(null);
+
+  const validarPassword2 = () => {
+    password.field.length > 0 && password.field === password2.field
+      ? setPassword2((prevState) => {
+          return { ...prevState, valid: true };
+        })
+      : setPassword2((prevState) => {
+          return { ...prevState, valid: false };
+        });
+  };
+
+  const onChangeTerminos = (e) => {
+    setTerminos(e.target.checked);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (
+      user.valid === true &&
+      name.valid === true &&
+      password.valid === true &&
+      password2.valid === true &&
+      email.valid === true &&
+      phone.valid === true &&
+      terminos
+    ) {
+      setFormValid(true)
+      setUser({ field: "", valid: null })
+      setName({ field: "", valid: null })
+      setPassword({ field: "", valid: null })
+      setPassword2({ field: "", valid: null })
+      setEmail({ field: "", valid: null })
+      setPhone({ field: "", valid: null })
+      setTerminos(false)
+    }else{
+      setFormValid(false)
+    }
+  };
 
   return (
-    <form action="" id="form">
+    <form onSubmit={onSubmit} id="form">
       <Input
         state={user}
         setState={setUser}
@@ -34,13 +74,13 @@ export default function Form() {
         placeholder="Jaun P."
         msgError="El nombre solo puede contener letras y espacios."
         regularExpression={expresiones.name}
-      />      
+      />
       <Input
         state={password}
         setState={setPassword}
         type="password"
         name="password"
-        label="Password"
+        label="Contraseña"
         placeholder="12345678"
         msgError="La contraseña debe contener entre 4 a 16 digitos"
         regularExpression={expresiones.password}
@@ -49,11 +89,11 @@ export default function Form() {
         state={password2}
         setState={setPassword2}
         type="password"
-        name="Repita la contraseña"
-        label="Password2"
+        name="password2"
+        label="Repita la contraseña"
         placeholder="12345678"
         msgError="Ambas contraseñas deben ser iguales"
-        
+        functionAux={validarPassword2}
       />
       <Input
         state={email}
@@ -76,10 +116,16 @@ export default function Form() {
         regularExpression={expresiones.phone}
       />
       <div className="containerTermino ">
-        <input type="checkbox" name="terminos" id="terminos" />
+        <input
+          type="checkbox"
+          name="terminos"
+          id="terminos"
+          checked={terminos}
+          onChange={onChangeTerminos}
+        />
         Acepto los Terminos y Condiciones.
       </div>
-      {false && (
+      {formValid === false && (
         <div className="msg-error">
           <p className="text-msg-error">
             <FontAwesomeIcon icon={faExclamationTriangle} />
@@ -91,7 +137,7 @@ export default function Form() {
         <button type="submit" className="formButton">
           Enviar
         </button>
-        <p className="msg-success">El formulario se envio correctamente!</p>
+        { formValid && <p className="msg-success">El formulario se envio correctamente!</p>}
       </div>
     </form>
   );

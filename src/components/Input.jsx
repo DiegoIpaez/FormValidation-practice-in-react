@@ -11,6 +11,7 @@ export default function Input({
   placeholder,
   msgError,
   regularExpression,
+  functionAux
 }) {
   const onChange = (e) => {
     setState({ ...state, field: e.target.value });
@@ -20,6 +21,8 @@ export default function Input({
     regularExpression && regularExpression.test(state.field)
       ? setState({ ...state, valid: true })
       : setState({ ...state, valid: false });
+
+    functionAux && functionAux();
   };
 
   return (

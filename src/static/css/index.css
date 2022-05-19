@@ -7,13 +7,17 @@
 body {
     margin: 0;
     padding: 0;
-    background: #e5e5e5;
+    background: #efefef;
     font-family: 'Montserrat', sans-serif;
 }
 
-main {
+main {    
     max-width: 800px;
     width: 90%;
     margin: auto;
+    margin-top: 55px;
+    border-radius: 7px;
     padding: 40px;
+    background: #e5e5e5;
+    box-shadow: 3px 0px 30px rgba(156, 156, 156, 0.4);
 }
